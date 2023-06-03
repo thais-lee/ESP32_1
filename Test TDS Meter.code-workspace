@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../Test TDS Meter"
+		},
+		{
+			"name": "ESP32_1",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
