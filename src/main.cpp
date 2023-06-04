@@ -7,6 +7,7 @@ void setup()
   // handleSensorData();
   // Serial.flush();
   // esp_deep_sleep_start();
+  setupTimer();
 }
 
 void loop()
@@ -38,8 +39,9 @@ void loop()
   Serial.print(" cm ");
   Serial.println();
 
-  // sendToThingSpeak(sensorData.tdsValue, sensorData.temperature, sensorData.humidity, sensorData.distanceCm);
-  delay(10000);
+  sendToThingSpeak(sensorData.tdsValue, sensorData.temperature, sensorData.humidity, sensorData.distanceCm);
+  delay(1000 * 60 * 5);
+  // delay(5000);
 }
 
 void handleSensorData()
@@ -123,4 +125,26 @@ void handleWaterHeight()
   controlPumps(12, LOW);
   sensorData.isPump1OnPrevious = true;
   sendToThingSpeak(sensorData.tdsValue, sensorData.temperature, sensorData.humidity, sensorData.distanceCm);
+}
+
+void IRAM_ATTR onTimer()
+{
+  portENTER_CRITICAL_ISR(&timerMux); // vào chế độ tránh xung đột
+  // digitalWrite(ledPin, ~ledState); // đảo giá trị Led
+  Serial.println("hehe");
+  Serial.println(count);
+  count++;
+  portEXIT_CRITICAL_ISR(&timerMux); // thoát
+}
+
+void setupTimer()
+{
+  // khơit tạo timer với chu kì 1us vì thạch anh của ESP chạy 8MHz
+  timer = timerBegin(0, 80, true);
+  // khởi tạo hàm xử lý ngắt ngắt cho Timer
+  timerAttachInterrupt(timer, &onTimer, true);
+  // khởi tạo thời gian ngắt cho timer là 2s (2000000 us)
+  timerAlarmWrite(timer, 2000000, true);
+  // bắt đầu chạy timer
+  timerAlarmEnable(timer);
 }

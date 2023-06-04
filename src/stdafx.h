@@ -7,6 +7,9 @@
 
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP  1800        /* Time ESP32 will go to sleep (in seconds) */ 
+int count = 1;
+hw_timer_t* timer = NULL; //khơi tạo timer
+portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED; 
 
 struct SensorData
 {
@@ -31,9 +34,13 @@ void setupSensors()
     setupDHT();
     setupSonic();
     setupPumps();
-    // initWifi();
-    // initThingSpeak();
+    initWifi();
+    initThingSpeak();
 }
 
 void handleSensorData();
 void handleWaterHeight();
+void setupTimer();
+
+// hàm xử lý ngắt
+void IRAM_ATTR onTimer();

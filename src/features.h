@@ -5,10 +5,8 @@
 #define CHANNEL_ID 2141870
 #define HEIGHT_OF_SENSOR 30
 
-// const char *ssid = "Tuan-712";
-// const char *password = "letuan1973";
-const char *ssid = "Anh ko an mung";
-const char *password = "thaile1234";
+const char *ssid = "Tuan-712";
+const char *password = "letuan1973";
 const char *write_api_key = "WQ22GRWT8BE7MTWX";
 
 WiFiClient client;
