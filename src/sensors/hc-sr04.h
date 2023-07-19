@@ -11,7 +11,6 @@
 
 long duration;
 float distanceCm;
-float distanceInch;
 
 void setupSonic()
 {
@@ -19,7 +18,7 @@ void setupSonic()
     pinMode(ECHO_PIN, INPUT);
 }
 
-void readHcSr04()
+float readHcSr04()
 {
     // Clears the trigPin
     digitalWrite(TRIGGER_PIN, LOW);
@@ -34,7 +33,5 @@ void readHcSr04()
 
     // Calculate the distance
     distanceCm = duration * SOUND_SPEED / 2;
-
-    // Convert to inches
-    distanceInch = distanceCm * CM_TO_INCH;
+    return distanceCm;
 }

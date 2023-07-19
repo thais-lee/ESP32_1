@@ -11,3 +11,9 @@ void setupWaterLevelSensor()
 {
     pinMode(WATER_LEVEL_SENSOR_PIN, INPUT);
 }
+
+float readWaterLevelSensor()
+{
+    waterLevel = analogRead(WATER_LEVEL_SENSOR_PIN);
+    return waterLevel;
+}

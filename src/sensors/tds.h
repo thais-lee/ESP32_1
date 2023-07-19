@@ -15,15 +15,13 @@
 
 int analogBuffer[SCOUNT]; // store the analog value in the array, read from ADC
 int analogBufferTemp[SCOUNT];
-int analogBufferIndex = 0;
-int copyIndex = 0;
 
 float averageVoltage = 0;
 float tdsValue = 0;
-float temperature = 25;
 
 OneWire oneWire(DS18B20Pin);
 DallasTemperature DS18B20(&oneWire);
+
 float waterTemp;
 
 void setupTdsSensor()
@@ -68,25 +66,35 @@ void getSensorValue()
     for (int i = 0; i < 30; i++)
     {
         analogBuffer[i] = analogRead(TdsSensorPin);
-        delay(10);
+        delay(20);
     }
 }
 
-void getTdsValue()
+float getTdsValue()
 {
     getSensorValue();
     // read the analog value more stable by the median filtering algorithm, and convert to voltage value
     averageVoltage = getMedianNum(analogBuffer, 30) * (float)VREF / 4095.0;
-
+    Serial.print("Average Voltage:");
+    Serial.print(averageVoltage, 2);
+    Serial.println("V");
     // temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0));
     float compensationCoefficient = 1.0 + 0.02 * (waterTemp - 25.0);
     // temperature compensation
     float compensationVoltage = averageVoltage / compensationCoefficient;
+    Serial.print("compensation voltage:");
+    Serial.print(compensationVoltage, 2);
+    Serial.println("V");
 
     // convert voltage value to tds value
     tdsValue = (133.42 * compensationVoltage * compensationVoltage * compensationVoltage - 255.86 * compensationVoltage * compensationVoltage + 857.39 * compensationVoltage) * 0.5;
-    Serial.print("TDS Value:");
-    Serial.print(tdsValue, 0);
-    Serial.println("ppm");
+
+    return tdsValue;
 };
+
+float getWaterTemperature()
+{
+    return waterTemp;
+}
+
 #endif

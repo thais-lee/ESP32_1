@@ -5,13 +5,8 @@
 #include "sensors/hc-sr04.h"
 #include "features.h"
 
-#define uS_TO_S_FACTOR 1000000 /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP 1800     /* Time ESP32 will go to sleep (in seconds) */
-int count = 1;
 hw_timer_t *timer = NULL; // khơi tạo timer
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
-float oldDistance = 0.0;
-float oldTdsValue = 0.0;
 
 struct SensorData
 {
@@ -24,7 +19,7 @@ struct SensorData
     bool isPump1OnPrevious;
 };
 
-RTC_DATA_ATTR SensorData sensorData;
+SensorData sensorData;
 
 void setupSensors()
 {
@@ -42,20 +37,12 @@ void setupSensors()
 
 void getData()
 {
-    float t = dht.readTemperature();
-    float h = dht.readHumidity();
-    readHcSr04();
-    getTdsValue();
-
-    oldDistance = sensorData.distanceCm;
-    oldTdsValue = sensorData.tdsValue;
-    
-    sensorData.humidity = h;
-    sensorData.temperature = t;
-    sensorData.tdsValue = tdsValue;
-    sensorData.distanceCm = distanceCm;
-    sensorData.waterLevel = waterLevel;
-    sensorData.waterTemp = waterTemp;
+    sensorData.humidity = dht.readHumidity();
+    sensorData.temperature = dht.readTemperature();
+    sensorData.tdsValue = getTdsValue();
+    sensorData.distanceCm = readHcSr04();
+    sensorData.waterLevel = readWaterLevelSensor();
+    sensorData.waterTemp = getWaterTemperature();
 }
 
 void handleSensorData();
