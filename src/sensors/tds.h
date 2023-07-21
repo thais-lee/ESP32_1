@@ -75,16 +75,10 @@ float getTdsValue()
     getSensorValue();
     // read the analog value more stable by the median filtering algorithm, and convert to voltage value
     averageVoltage = getMedianNum(analogBuffer, 30) * (float)VREF / 4095.0;
-    Serial.print("Average Voltage:");
-    Serial.print(averageVoltage, 2);
-    Serial.println("V");
     // temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0));
     float compensationCoefficient = 1.0 + 0.02 * (waterTemp - 25.0);
     // temperature compensation
     float compensationVoltage = averageVoltage / compensationCoefficient;
-    Serial.print("compensation voltage:");
-    Serial.print(compensationVoltage, 2);
-    Serial.println("V");
 
     // convert voltage value to tds value
     tdsValue = (133.42 * compensationVoltage * compensationVoltage * compensationVoltage - 255.86 * compensationVoltage * compensationVoltage + 857.39 * compensationVoltage) * 0.5;

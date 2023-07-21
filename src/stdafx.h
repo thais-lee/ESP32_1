@@ -7,7 +7,7 @@
 
 hw_timer_t *timer = NULL; // khơi tạo timer
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
-
+int count = 0;
 struct SensorData
 {
     float tdsValue;
@@ -40,7 +40,7 @@ void getData()
     sensorData.humidity = dht.readHumidity();
     sensorData.temperature = dht.readTemperature();
     sensorData.tdsValue = getTdsValue();
-    sensorData.distanceCm = readHcSr04();
+    sensorData.distanceCm = readHcSr04Avg();
     sensorData.waterLevel = readWaterLevelSensor();
     sensorData.waterTemp = getWaterTemperature();
 }

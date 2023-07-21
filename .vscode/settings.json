@@ -285,5 +285,6 @@
   ],
   "C_Cpp_Runner.useUndefinedSanitizer": false,
   "C_Cpp_Runner.useLeakSanitizer": false,
-  "C_Cpp_Runner.useLinkTimeOptimization": false
+  "C_Cpp_Runner.useLinkTimeOptimization": false,
+  "cmake.sourceDirectory": "/Users/lethai/Documents/PlatformIO/Projects/ESP32_1/.pio/libdeps/esp32doit-devkit-v1/Unity"
 }

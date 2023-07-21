@@ -20,18 +20,28 @@ void setupSonic()
 
 float readHcSr04()
 {
-    // Clears the trigPin
     digitalWrite(TRIGGER_PIN, LOW);
     delayMicroseconds(2);
-    // Sets the trigPin on HIGH state for 10 micro seconds
     digitalWrite(TRIGGER_PIN, HIGH);
     delayMicroseconds(10);
     digitalWrite(TRIGGER_PIN, LOW);
-
-    // Reads the echoPin, returns the sound wave travel time in microseconds
     duration = pulseIn(ECHO_PIN, HIGH);
+    return duration * SOUND_SPEED / 2;
+}
 
-    // Calculate the distance
-    distanceCm = duration * SOUND_SPEED / 2;
+float readHcSr04Avg()
+{
+    float tempDistanceCm[20] = {0};
+    for (int i = 0; i < 20; i++)
+    {
+        tempDistanceCm[i] = readHcSr04();
+        delay(50);
+    }
+    float sum = 0;
+    for (int i = 0; i < 20; i++)
+    {
+        sum += tempDistanceCm[i];
+    }
+    distanceCm = sum / 20;
     return distanceCm;
 }
